@@ -1,6 +1,6 @@
 # Machine Learning Interview Questions
 
-## Machine Learning Fundamentals (Machine%20Learning%20Fundamentals.md)
+## [Machine Learning Fundamentals] (Machine%20Learning%20Fundamentals.md)
 
 1. What is Gradient Descent?
 2. What is the Learning Rate?
