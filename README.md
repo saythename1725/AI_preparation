@@ -19,7 +19,7 @@
 
 ---
 
-## Regression
+## [Regression](Regression.md)
 
 16. What is a Normal Distribution?
 17. What are the assumptions behind Linear Regression?
