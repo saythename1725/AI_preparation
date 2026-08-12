@@ -32,7 +32,7 @@
 
 ---
 
-## Classification
+## [Classification](Classification.md)
 
 24. Why can't we use Regression metrics like MSE and R² for Classification problems?
 25. What are the mathematical differences between Regression and Classification?
