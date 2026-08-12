@@ -1,0 +1,665 @@
+# 48. Why does a Regression Tree split based on Variance Reduction?
+
+The main goal of a Regression Tree is to predict a **continuous value**.
+
+For example:
+
+```text
+House Price = ₹80 lakhs
+Salary = ₹12 lakhs
+Temperature = 32.5°C
+```
+
+At every split, the tree tries to create groups where the target values are as similar as possible.
+
+---
+
+## The main intuition
+
+Suppose we are predicting house prices.
+
+Initially, one node contains:
+
+```text
+50L, 55L, 60L, 120L, 130L, 140L
+```
+
+These values are very spread out.
+
+So, the variance is high.
+
+Now suppose the tree splits the data into:
+
+```text
+Node 1:
+50L, 55L, 60L
+
+Node 2:
+120L, 130L, 140L
+```
+
+Within each node, the values are now much more similar.
+
+So the variance inside each node has decreased.
+
+That is a good split.
+
+---
+
+## Why variance?
+
+A Regression Tree usually predicts the **mean value** of the samples inside a leaf.
+
+For example:
+
+```text
+Leaf values:
+50, 55, 60
+
+Prediction = Mean = 55
+```
+
+The best split is the one that creates groups where the values are concentrated around their mean.
+
+So the tree looks for the split that gives the maximum reduction in variance or, equivalently, the maximum reduction in squared error.
+
+---
+
+## The process
+
+At each possible split, the tree asks:
+
+```text
+Before split:
+How spread out are the target values?
+
+After split:
+How spread out are the target values
+inside the child nodes?
+```
+
+Then it chooses the split that gives the largest reduction.
+
+```text
+Variance Before Split
+        ↓
+Try different splits
+        ↓
+Calculate Variance After Split
+        ↓
+Choose the split with
+Maximum Variance Reduction
+```
+
+---
+
+## Connection with MSE
+
+Variance reduction and minimizing squared error are closely related.
+
+Since the prediction inside a leaf is usually the mean, the tree wants to minimize:
+
+```text
+Sum of squared differences
+between actual values and the leaf mean
+```
+
+So you can also think of a Regression Tree as trying to minimize the **Residual Sum of Squares** or **MSE** within each node.
+
+---
+
+## How I would explain it in an interview
+
+> A Regression Tree predicts continuous values, so at each split it tries to create child nodes where the target values are as similar as possible. It usually predicts the mean value inside a leaf, so the best split is the one that maximally reduces the variance or squared error within the child nodes.
+
+---
+
+# 49. Why does a Classification Tree split using Gini Impurity or Entropy?
+
+A Classification Tree predicts categories.
+
+For example:
+
+```text
+Fraud / Not Fraud
+Spam / Not Spam
+Cat / Dog
+```
+
+So instead of asking:
+
+> How spread out are the numerical target values?
+
+we ask:
+
+> How mixed are the classes inside a node?
+
+This is called **impurity**.
+
+---
+
+## Example of a pure node
+
+Suppose a node contains:
+
+```text
+Fraud
+Fraud
+Fraud
+Fraud
+```
+
+There is no uncertainty.
+
+This is a pure node.
+
+---
+
+## Example of an impure node
+
+Now suppose a node contains:
+
+```text
+Fraud
+Fraud
+Not Fraud
+Not Fraud
+```
+
+The classes are mixed.
+
+This node has higher impurity.
+
+---
+
+## The goal of a split
+
+A Classification Tree wants to create child nodes that are as pure as possible.
+
+For example:
+
+```text
+Before split:
+
+Fraud
+Fraud
+Not Fraud
+Not Fraud
+Not Fraud
+Fraud
+```
+
+After a good split:
+
+```text
+Left Node:
+Fraud
+Fraud
+Fraud
+
+Right Node:
+Not Fraud
+Not Fraud
+Not Fraud
+```
+
+The child nodes are much purer.
+
+---
+
+# Gini Impurity
+
+Gini Impurity measures how mixed the classes are inside a node.
+
+A lower Gini Impurity means the node is more pure.
+
+A node containing only one class has:
+
+```text
+Gini Impurity = 0
+```
+
+The tree chooses splits that give the largest reduction in Gini Impurity.
+
+---
+
+# Entropy
+
+Entropy also measures impurity or uncertainty.
+
+The idea is:
+
+> How uncertain are we about the class of a randomly selected observation?
+
+A completely pure node has low entropy.
+
+A node where classes are equally mixed has high entropy.
+
+The tree chooses splits that reduce entropy.
+
+This reduction is called **Information Gain**.
+
+---
+
+## Gini vs Entropy
+
+Both are trying to achieve the same goal:
+
+```text
+Mixed Node
+    ↓
+Find a split
+    ↓
+Create more pure child nodes
+```
+
+In practice, they often produce similar results.
+
+Gini is generally slightly faster to calculate, which is one reason it is commonly used.
+
+---
+
+## How I would explain it in an interview
+
+> A Classification Tree predicts categories, so instead of reducing variance, it tries to reduce class impurity. Gini Impurity and Entropy measure how mixed the classes are inside a node. The tree chooses the split that creates the purest child nodes by maximizing impurity reduction or information gain.
+
+---
+
+# 50. What is Pruning?
+
+Pruning is the process of reducing the size of a Decision Tree by removing unnecessary branches.
+
+The main purpose is to prevent overfitting.
+
+---
+
+## Why do trees need pruning?
+
+A Decision Tree can keep splitting until it learns very specific patterns from the training data.
+
+For example:
+
+```text
+Training Data Accuracy = 100%
+Test Data Accuracy = Poor
+```
+
+The tree may have memorized noise instead of learning general patterns.
+
+This is overfitting.
+
+---
+
+## The intuition
+
+Imagine a tree like this:
+
+```text
+Is Income > 50,000?
+        │
+       Yes
+        │
+Is Age > 32?
+        │
+       Yes
+        │
+Is Customer ID ending in 7?
+```
+
+The last split probably captures noise rather than useful information.
+
+Pruning removes such unnecessary complexity.
+
+---
+
+# Types of Pruning
+
+## 1. Pre-Pruning
+
+Pre-pruning stops the tree from growing too much in the first place.
+
+Common parameters include:
+
+* `max_depth`
+* `min_samples_split`
+* `min_samples_leaf`
+* `max_leaf_nodes`
+
+For example:
+
+```text
+max_depth = 5
+```
+
+means the tree cannot grow beyond a depth of 5.
+
+---
+
+## 2. Post-Pruning
+
+Post-pruning first allows the tree to grow.
+
+Then it removes branches that do not provide enough improvement.
+
+The idea is:
+
+```text
+Grow a large tree
+        ↓
+Check whether branches actually help
+        ↓
+Remove unnecessary branches
+```
+
+A common method is **Cost Complexity Pruning**.
+
+---
+
+## How I would explain it in an interview
+
+> Pruning is used to simplify a Decision Tree by removing branches that do not provide enough predictive value. The main purpose is to reduce overfitting. Pre-pruning controls tree growth using parameters such as maximum depth, while post-pruning first grows the tree and then removes branches that do not improve generalization.
+
+---
+
+# 51. How does Cross Validation help with Pruning?
+
+Pruning involves choosing how complex the Decision Tree should be.
+
+The challenge is:
+
+> How do we know whether a deeper tree is actually learning useful patterns or simply memorizing the training data?
+
+Cross-validation helps answer this.
+
+---
+
+## Example
+
+Suppose we try different tree depths:
+
+```text
+Depth = 3
+Depth = 5
+Depth = 10
+Depth = 20
+```
+
+For each option, we perform cross-validation.
+
+We might get:
+
+```text
+Depth 3  → CV Score = 82%
+Depth 5  → CV Score = 87%
+Depth 10 → CV Score = 88%
+Depth 20 → CV Score = 84%
+```
+
+The depth of 20 may perform extremely well on training data but worse on unseen validation folds.
+
+This suggests overfitting.
+
+So we may choose:
+
+```text
+Depth = 10
+```
+
+because it gives the best average validation performance.
+
+---
+
+## How it helps with post-pruning
+
+For Cost Complexity Pruning, we can try different pruning strengths.
+
+For each value:
+
+```text
+Pruning parameter α
+```
+
+we evaluate the model using cross-validation.
+
+The goal is to find the level of pruning that gives the best generalization.
+
+---
+
+## The key idea
+
+Cross-validation helps us choose tree complexity based on performance on unseen data rather than training performance.
+
+```text
+Too Simple
+Underfitting
+        ↓
+Best Complexity
+        ↓
+Too Complex
+Overfitting
+```
+
+Cross-validation helps us find the middle point.
+
+---
+
+## How I would explain it in an interview
+
+> Cross-validation helps with pruning by evaluating different levels of tree complexity on unseen validation folds. Instead of choosing a deep tree based on training accuracy, we compare the cross-validation performance of different depths or pruning parameters and select the complexity that generalizes best.
+
+---
+
+# 52. What Loss Function does XGBoost use?
+
+XGBoost does not use only one fixed loss function.
+
+The loss function depends on the problem.
+
+For example:
+
+```text
+Regression
+→ Squared Error
+
+Binary Classification
+→ Logistic Loss
+
+Multi-class Classification
+→ Softmax / Cross-Entropy Loss
+```
+
+---
+
+## The general idea
+
+XGBoost is a Gradient Boosting algorithm.
+
+It builds trees sequentially.
+
+Each new tree tries to correct the mistakes made by the previous trees.
+
+The model tries to minimize an objective function that has two parts:
+
+```text
+Total Objective
+
+= Prediction Loss
++ Regularization
+```
+
+The prediction loss measures:
+
+> How different are the predictions from the actual values?
+
+The regularization term controls:
+
+> How complex are the trees?
+
+This helps reduce overfitting.
+
+---
+
+## For Regression
+
+A common objective is squared error.
+
+Conceptually:
+
+```text
+Actual = 100
+Prediction = 90
+
+Error = 10
+```
+
+The loss increases as the prediction moves further away from the actual value.
+
+---
+
+## For Binary Classification
+
+XGBoost commonly uses logistic loss.
+
+The model predicts probabilities.
+
+For example:
+
+```text
+Probability of Fraud = 0.85
+```
+
+Logistic loss penalizes incorrect predictions, especially when the model is confidently wrong.
+
+---
+
+## Why is XGBoost flexible?
+
+XGBoost is designed around an objective function that can use gradients and second-order derivatives.
+
+This allows it to support different differentiable loss functions depending on the task.
+
+---
+
+## How I would explain it in an interview
+
+> XGBoost does not have a single fixed loss function. The objective depends on the problem. For regression, squared error is commonly used, while binary classification commonly uses logistic loss and multi-class classification uses softmax-based cross-entropy. The overall XGBoost objective also includes a regularization term to control tree complexity and reduce overfitting.
+
+---
+
+# 53. What is the role of the Learning Rate in Gradient Boosting?
+
+Gradient Boosting builds models sequentially.
+
+Each new tree tries to correct the mistakes of the existing model.
+
+The Learning Rate controls:
+
+> How much each new tree contributes to the final model.
+
+---
+
+## Example
+
+Suppose a new tree learns a correction of:
+
+```text
++10
+```
+
+With:
+
+```text
+Learning Rate = 1
+```
+
+the model applies the full correction:
+
+```text
++10
+```
+
+With:
+
+```text
+Learning Rate = 0.1
+```
+
+the model applies only:
+
+```text
++1
+```
+
+So the update is smaller.
+
+---
+
+## Why use a smaller Learning Rate?
+
+A smaller learning rate makes the model learn more gradually.
+
+This can help:
+
+* Reduce overfitting
+* Make training more stable
+* Improve generalization
+
+But there is a trade-off.
+
+A smaller learning rate usually requires more trees.
+
+For example:
+
+```text
+Learning Rate = 0.3
+→ May need fewer trees
+
+Learning Rate = 0.05
+→ Usually needs more trees
+```
+
+---
+
+## Learning Rate and Number of Trees
+
+These two hyperparameters are closely connected.
+
+```text
+High Learning Rate
+        ↓
+Each tree has a larger impact
+        ↓
+Fewer trees may be needed
+        ↓
+Higher risk of overfitting
+
+Low Learning Rate
+        ↓
+Each tree has a smaller impact
+        ↓
+More trees are needed
+        ↓
+Often better generalization if tuned properly
+```
+
+This is why they are usually tuned together.
+
+---
+
+## Important Point
+
+A very low learning rate is not automatically better.
+
+If the number of trees is not increased enough, the model may underfit because it has not learned enough.
+
+So the goal is to find a good combination of:
+
+* Learning Rate
+* Number of Estimators
+* Tree Depth
+
+---
+
+## How I would explain it in an interview
+
+> In Gradient Boosting, the learning rate controls how much each new tree contributes to the existing model. A smaller learning rate makes learning more gradual and usually requires more trees, while a larger learning rate makes each tree have a stronger impact and can converge faster but may increase the risk of overfitting. Therefore, the learning rate and number of estimators are usually tuned together.
