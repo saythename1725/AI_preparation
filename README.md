@@ -71,7 +71,7 @@
 
 ---
 
-## Tree-Based Models and Gradient Boosting
+## [Tree-Based Models and Gradient Boosting](Tree-Based%20Models%20and%20Gradient%20Boosting)
 
 48. Why does a Regression Tree split based on Variance Reduction?
 49. Why does a Classification Tree split using Gini Impurity or Entropy?
