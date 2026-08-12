@@ -52,7 +52,7 @@
 
 ---
 
-## Feature Selection and Engineering
+## [Feature Selection and Engineering](Feature%20Selection%20and%20Engineering.md)
 
 39. What are the different ways to find the most important features?
 40. How do you choose between two highly correlated features?
@@ -62,7 +62,7 @@
 
 ---
 
-## Statistics and Hypothesis Testing
+## [Statistics and Hypothesis Testing](Statistics%20and%20Hypothesis%20Testing.md)
 
 44. What is Hypothesis Testing?
 45. What hypothesis testing framework is used in the Chi-Square Test?
