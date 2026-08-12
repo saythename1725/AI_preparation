@@ -82,7 +82,7 @@
 
 ---
 
-## SVM and Distance-Based Algorithms
+## [SVM and Distance-Based Algorithms](SVM.md)
 
 54. How do Decision Boundaries differ in SVMs with Linear and Non-linear Kernels?
 55. What is the Kernel Trick in SVM?
