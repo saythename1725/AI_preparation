@@ -91,7 +91,7 @@
 
 ---
 
-## Unsupervised Learning
+## [Unsupervised Learning](unsupervised.md)
 
 58. How does K-Means Clustering work?
 59. What are the limitations of K-Means?
@@ -99,7 +99,7 @@
 
 ---
 
-## Deep Learning
+## [Deep Learning](deep_learning.md)
 
 61. What is Backpropagation?
 62. How are Optimizers different from Backpropagation?
