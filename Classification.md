@@ -78,20 +78,43 @@ The model should not consider predicting Bird when the answer is Cat as "twice a
 
 Classification problems care about questions like:
 
-* Did we predict the correct class?
-* How many positive cases did we miss?
-* How many false alarms did we generate?
-* How confident was the model in its prediction?
+Accuracy, Precision, Recall, F1 Score, ROC Curve, and AUC
+|                     |  Predicted Positive |  Predicted Negative |
+| ------------------- | ------------------: | ------------------: |
+| **Actual Positive** |  True Positive (TP) | False Negative (FN) |
+| **Actual Negative** | False Positive (FP) |  True Negative (TN) |
 
-That is why we use:
+Accuracy measures the overall proportion of correct predictions. However, I would avoid relying on it for highly imbalanced datasets because a model can achieve high accuracy simply by predicting the majority class.
+Accuracy = (TP + TN) / Total Predictions
 
-* Accuracy
-* Precision
-* Recall
-* F1 Score
-* ROC-AUC
-* PR-AUC
-* Log Loss
+Precision measures how trustworthy our positive predictions are. If my model predicts 100 cases as positive, precision tells me how many of those are actually positive. I would prioritize precision when the cost of a false positive is high.
+Precision = TP / (TP + FP)
+
+Recall measures the model's ability to identify actual positive cases. I would prioritize recall when false negatives are costly. For example, in fraud detection, missing a fraudulent transaction could be more expensive than investigating an additional legitimate transaction
+Recall = TP / (TP + FN)
+
+Precision vs Recall: The Trade-off
+Suppose you have a fraud model.If you lower the classification threshold:
+0.8 → 0.5 → 0.2
+More transactions will be classified as fraud.
+This usually means:
+Recall increases because you catch more fraud.
+Precision may decrease because you also flag more legitimate transactions.
+So the correct threshold depends on the business cost of:
+False Positives
+False Negatives
+
+F1 Score is the harmonic mean of precision and recall. It is useful when we need a balance between false positives and false negatives, especially in imbalanced classification problems. However, if the business cares significantly more about one type of error, I would optimize a metric that reflects that cost rather than blindly maximizing F1.
+F1 = 2 × (Precision × Recall) / (Precision + Recall)
+Why harmonic mean instead of arithmetic mean?
+Because the harmonic mean penalizes extreme imbalance.
+
+ROC-AUC evaluates a model's ability to distinguish between classes across all possible thresholds. The ROC curve plots the true positive rate against the false positive rate, and AUC summarizes this performance into a single number. A higher AUC indicates better ranking ability. However, for highly imbalanced datasets, I would also examine the Precision-Recall curve because ROC-AUC can sometimes give an overly optimistic picture of performance.
+
+How I would answer: "Which classification metric would you choose?"
+I wouldn't select a metric before understanding the business problem. First, I would look at class imbalance and the relative cost of false positives and false negatives. If the dataset is balanced and both classes are equally important, accuracy can be useful. If false positives are expensive, I would focus more on precision. If missing a positive case is expensive, I would focus on recall. If I need a balance between precision and recall, I would use F1 score. For evaluating the model's overall ranking ability independent of a particular threshold, I would look at ROC-AUC, and for highly imbalanced problems, I would also consider PR-AUC.
+
+Finally, in a real business setting, I would choose the operating threshold based on the actual cost or benefit associated with TP, FP, TN, and FN rather than selecting a threshold based only on a generic metric.
 
 ---
 
