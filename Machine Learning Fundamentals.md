@@ -1,3 +1,8 @@
+# 0. What is Bagging and Boosting?
+Bagging is an ensemble method mainly used to reduce variance. We train multiple models independently on different bootstrap samples of the data and aggregate their predictions using voting or averaging. A classic example is Random Forest. It is particularly useful for high-variance models like decision trees because averaging multiple diverse models produces a more stable and robust prediction.
+
+Boosting is an ensemble technique where weak learners are trained sequentially, and each new learner tries to correct the errors or residuals of the previous model. The final prediction is a weighted combination of all learners. Unlike bagging, boosting primarily focuses on reducing bias and improving predictive performance. Popular examples include XGBoost, LightGBM, and CatBoost.
+
 # 1. What is Gradient Descent?
 
 ## The idea
