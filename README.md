@@ -62,7 +62,7 @@
 
 ---
 
-## [Statistics and Hypothesis Testing](Statistics%20and%20Hypothesis%20Testing.md)
+## [Statistics and Hypothesis Testing](statistics.md)
 
 44. What is Hypothesis Testing?
 45. What hypothesis testing framework is used in the Chi-Square Test?
