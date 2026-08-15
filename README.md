@@ -64,10 +64,24 @@
 
 ## [Statistics and Hypothesis Testing](statistics.md)
 
-44. What is Hypothesis Testing?
-45. What hypothesis testing framework is used in the Chi-Square Test?
-46. What is the Chi-Square Test?
-47. What is the difference between Correlation and Cohesion?
+What is the Central Limit Theorem and why is it important?
+Explain a p-value.
+How do you calculate a confidence interval?
+Explain descriptive vs predictive vs prescriptive analytics.
+Explain Bayesian probability.
+How would you determine whether an A/B test is statistically significant?
+
+I would prepare these additional questions:
+
+Hypothesis Testing
+What is the null hypothesis?
+Type I vs Type II error.
+What is statistical power?
+What is the relationship between p-value and confidence interval?
+Can a statistically significant result be practically insignificant?
+How do you determine sample size for an experiment?
+When would you use a t-test vs chi-square test?
+What assumptions do statistical tests make?
 
 ---
 
