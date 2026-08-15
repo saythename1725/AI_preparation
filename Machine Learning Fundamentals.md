@@ -5,119 +5,35 @@ Boosting is an ensemble technique where weak learners are trained sequentially, 
 
 # 1. What is Gradient Descent?
 
-## The idea
+Gradient descent is the basic optimization technique we use to minimize the loss function with respect to the model parameters.
 
-When we train a model, we want to reduce its error.
+We start with some initial weights, make predictions, calculate the loss, and then calculate the gradient of the loss with respect to each parameter. The gradient tells us how the loss changes locally as we change that parameter.
 
-Gradient Descent is simply a method that tells the model:
+Since the gradient points in the direction of the steepest increase in the loss, we update the parameters in the opposite direction:
 
-> "You are currently making this much error. Which direction should you change your parameters so that the error becomes smaller?"
+θ=θ−η∇J(θ)
 
-It then repeatedly updates the parameters until it reaches a minimum or a sufficiently good solution.
+where the learning rate controls the step size.
 
-A simple analogy is walking downhill in fog. You cannot see the entire mountain, but you can check which direction goes downward from where you currently stand and take a step.
+Depending on how we calculate the gradient, we can use Batch Gradient Descent, SGD, or Mini-Batch Gradient Descent.
 
----
+Batch Gradient Descent uses the entire dataset for each update, so the updates are stable but computationally expensive.
 
-## How does it work?
+Pure SGD updates using one sample at a time, so it is computationally cheaper and gives frequent updates, but the gradient estimate is noisy.
 
-Suppose we have a simple model:
+In practice, Mini-Batch Gradient Descent is most commonly used, where we calculate gradients over a small subset of the data. This gives a balance between computational efficiency and stable optimization.
 
-```text
-Prediction = w × x + b
-```
+Vanilla SGD uses the current gradient for the update, but we can improve the optimization using techniques such as Momentum, which uses information from previous gradients to smooth the update direction and reduce oscillations.
 
-Initially, `w` and `b` might be random.
+Then there are adaptive optimizers. AdaGrad adapts the learning rate for individual parameters based on their gradient history, but its learning rate can decay too aggressively. RMSProp addresses this by using an exponentially weighted average of recent squared gradients instead.
 
-The process is:
+Adam combines the ideas of Momentum and RMSProp. It maintains a moving average of gradients to estimate the update direction and a moving average of squared gradients to adapt the step size for each parameter. It also applies bias correction during the early stages of training.
 
-```text
-Start with parameters
-        ↓
-Make predictions
-        ↓
-Calculate loss
-        ↓
-Calculate gradients
-        ↓
-Update parameters
-        ↓
-Repeat
-```
+In many modern deep learning applications, we also use AdamW, which decouples weight decay from the adaptive gradient update and generally provides better regularization behaviour than directly combining L2 regularization with Adam.
 
-The gradient tells us how changing a parameter will affect the loss.
+The choice of optimizer depends on the problem. Adam or AdamW is often a strong starting point because of faster and more stable optimization, but SGD with Momentum can sometimes provide better generalization, particularly in some computer vision problems. So I wouldn't treat any optimizer as universally best.
 
-If increasing a parameter increases the loss, we should move in the opposite direction.
-
-The update is generally represented as:
-
-[
-new\ parameter = old\ parameter - learning\ rate \times gradient
-]
-
----
-
-## Types of Gradient Descent
-
-### Batch Gradient Descent
-
-Uses the entire dataset before making one update.
-
-```text
-Entire dataset → Calculate gradient → Update
-```
-
-It gives stable updates but can be slow for large datasets.
-
----
-
-### Stochastic Gradient Descent
-
-Updates the model after looking at one training example.
-
-```text
-One sample → Update
-One sample → Update
-One sample → Update
-```
-
-It is faster but noisier.
-
----
-
-### Mini-Batch Gradient Descent
-
-Uses a small batch of samples before updating.
-
-```text
-32 samples → Update
-32 samples → Update
-32 samples → Update
-```
-
-This is the most common approach in deep learning because it provides a balance between speed and stability.
-
----
-
-## Important point
-
-Gradient Descent does not guarantee that a deep learning model will always find the global minimum.
-
-The result depends on things like:
-
-* Learning rate
-* Initialization
-* Loss landscape
-* Optimizer
-* Batch size
-
----
-
-## How I would explain it in an interview
-
-> Gradient Descent is an optimization technique used to reduce the model's loss. The model calculates how each parameter affects the error and then updates the parameters in the direction that reduces that error. I think of it like walking downhill: at every step, we check which direction decreases the height and keep moving in that direction.
-
----
+And finally, the optimizer is only one part of the training process. Learning rate, initialization, batch size, normalization, regularization, and the structure of the loss landscape can all significantly affect convergence.
 
 # 2. What is the Learning Rate?
 
